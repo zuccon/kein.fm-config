@@ -1,0 +1,4 @@
+fail2ban__custom_ports:
+  - 9033/tcp
+  - 80/tcp
+#  - 18231/tcp

@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<icecast>
+  <limits>
+    <clients>100</clients>
+    <sources>10</sources>
+    <threadpool>5</threadpool>
+    <queue-size>524288</queue-size>
+    <client-timeout>30</client-timeout>
+    <header-timeout>15</header-timeout>
+    <source-timeout>10</source-timeout>
+    <burst-on-connect>1</burst-on-connect>
+    <burst-size>131070</burst-size>
+  </limits>
+  <authentication>
+    <source-password>{{ icecast__source_password }}</source-password>
+    <relay-password>{{ icecast__relay_password }}</relay-password>
+    <admin-user>{{ icecast__admin_username }}</admin-user>
+    <admin-password>{{ icecast__admin_password }}</admin-password>
+  </authentication>
+  <directory>
+    <yp-url-timeout>15</yp-url-timeout>
+    <yp-url>http://dir.xiph.org/cgi-bin/yp-cgi</yp-url>
+  </directory>
+  <directory>
+    <yp-url-timeout>60</yp-url-timeout>
+    <yp-url>http://streamstat.net/yp.cgi</yp-url>
+  </directory>
+  <hostname>kein.fm</hostname>
+  <location>earth</location>
+  <admin>invalid@kein.fm</admin>
+  <listen-socket>
+    <port>8000</port>
+    <bind-address>0.0.0.0</bind-address>
+  </listen-socket>
+  <mount>
+    <mount-name>/zuhause</mount-name>
+    <intro>samples/Hello.mp3</intro>
+  </mount>
+  <mount>
+    <mount-name>/listen</mount-name>
+    <stream-name>kein.fm</stream-name>
+    <username>{{ icecast__listen_mount_username }}</username>
+    <password>{{ icecast__listen_mount_password }}</password>
+    <dump-file>{{ icecast__recordings_path }}/keinfmlive_%Y-%m-%d_%A_%H%M.mp3</dump-file>
+    <stream-description>Live from somewhere</stream-description>
+    <on-disconnect>{{ icecast__scripts_path }}/on-disconnect.sh</on-disconnect>
+    <on-connect>{{ icecast__scripts_path }}/on-connect.sh</on-connect>
+    <fallback-mount>/zuhause</fallback-mount>
+    <fallback-override>1</fallback-override>
+  </mount>
+  <mount>
+    <mount-name>/megahex</mount-name>
+    <stream-name>megahex</stream-name>
+    <username>onkel</username>
+    <password>a very complex one</password>
+    <dump-file>/var/www/keinfm/recordings/upstate/upstatelive_%Y-%m-%d_%A_%H%M.mp3</dump-file>
+    <stream-description>Streaming from Up State</stream-description>
+  </mount>
+  <fileserve>1</fileserve>
+  <http-headers>
+    <header name="Access-Control-Allow-Origin" value="*"/>
+    <header name="X-Robots-Tag" value="index, noarchive"/>
+    <header name="X-Much-Love" value="true" status="200"/>
+  </http-headers>
+  <paths>
+    <!-- basedir is only used if chroot is enabled -->
+    <basedir>/usr/share/icecast2</basedir>
+    <!-- Note that if <chroot> is turned on below, these paths must both
+             be relative to the new root, not the original root -->
+    <logdir>/var/log/icecast2</logdir>
+    <webroot>/usr/share/icecast2/web</webroot>
+    <adminroot>/usr/share/icecast2/admin</adminroot>
+    <!-- <pidfile>/var/run/icecast/icecast.pid</pidfile> -->
+    <!-- Aliases: treat requests for 'source' path as being for 'dest' path
+             May be made specific to a port or bound address using the "port"
+             and "bind-address" attributes.
+          -->
+    <!--
+        <alias source="/foo" dest="/bar"/>
+          -->
+    <!-- Aliases: can also be used for simple redirections as well,
+             this example will redirect all requests for http://server:port/ to
+             the status page
+          -->
+    <alias source="/" dest="/status.xsl"/>
+  </paths>
+  <logging>
+    <accesslog>access.log</accesslog>
+    <errorlog>error.log</errorlog>
+    <!-- <playlistlog>playlist.log</playlistlog> -->
+    <loglevel>3</loglevel>
+    <!-- 4 Debug, 3 Info, 2 Warn, 1 Error -->
+    <logsize>10000</logsize>
+    <!-- Max size of a logfile -->
+    <!-- If logarchive is enabled (1), then when logsize is reached
+             the logfile will be moved to [error|access|playlist].log.DATESTAMP,
+             otherwise it will be moved to [error|access|playlist].log.old.
+             Default is non-archive mode (i.e. overwrite)
+        -->
+    <!-- <logarchive>1</logarchive> -->
+  </logging>
+  <security>
+    <chroot>0</chroot>
+    <!--
+        <changeowner>
+            <user>icecast2</user>
+            <group>icecast</group>
+	</changeowner>
+	-->
+  </security>
+</icecast>

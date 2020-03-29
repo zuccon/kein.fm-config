@@ -1,0 +1,30 @@
+---
+qwebirc_scheme: http
+qwebirc_port: 9090
+qwebirc_bind_address: 0.0.0.0
+
+qwebirc_user: qwebirc
+qwebirc_user_homedir: /home/qwebirc
+
+qwebirc_install_path: "{{ qwebirc_user_homedir }}/qwebirc"
+qwebirc_git_repo: https://github.com/zuccon/qwebirc.git
+qwebirc_git_branch: keinfm
+
+# TODO: enable https
+
+qwebirc_ssl_cert:
+qwebirc_ssl_cert_key:
+qwebirc_ssl_chain:
+# ./run.py -k key -C cert -H chain
+
+# python-virtualenv and python-setuptools are required by ansible's 'pip' module
+# python-dev is required to compile pip dependencies
+qwebirc_apt_dependencies:
+  - python
+  - python-pip
+  - python-openssl
+  - python-virtualenv
+  - python-setuptools
+  - python-dev
+  - default-jre-headless
+  - git

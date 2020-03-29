@@ -1,0 +1,69 @@
+---
+- name: set timezone to UTC
+  timezone:
+    name: "Etc/UTC"
+
+- name: deploy /etc/locale.gen
+  template:
+    src: locale.gen.j2
+    dest: /etc/locale.gen
+
+# TODO: make dynamic motd
+- name: deploy motd
+  template:
+    src: motd.j2
+    dest: /etc/motd
+    mode: "0644"
+    owner: root
+    group: root
+
+- name: generate locales
+  shell: locale-gen
+
+- name: Create user for Ansible
+  user:
+    name: "{{ item }}"
+    state: present
+    groups: sudo
+  with_items:
+    - "{{ target_setup__ansible_user }}"
+
+- name: Add authorized keys for ansible user
+  authorized_key:
+    user: "{{ target_setup__ansible_user }}"
+    state: present
+    key: "{{ item }}"
+  with_items:
+    - "{{ lookup('file', '/home/zu/.ssh/id_ed25519_zencash.pub') }}"
+
+- name: Add authorized keys for root
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ item }}"
+  with_items:
+    - "{{ lookup('file', '/home/zu/.ssh/id_ed25519_ansible-mine.pub') }}"
+
+- name: Deploy /etc/sudoers
+  template:
+    src: sudoers.j2
+    dest: /etc/sudoers
+    owner: root
+    group: root
+    mode: 0440
+
+- name: deploy tmux.conf
+  template:
+    src: tmux.conf.j2
+    dest: /root/.tmux.conf
+  tags:
+    - config
+
+# - name: Deploy /etc/ssh/sshd_config
+#   template:
+#     src: sshd_config.j2
+#     dest: /etc/ssh/sshd_config
+#     owner: root
+#     group: root
+#     mode: 0400
+#   notify: restart sshd

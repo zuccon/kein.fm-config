@@ -1,0 +1,36 @@
+target_setup__ansible_user: ansible
+
+target_setup__packages_yum:
+  - sudo
+  - net-tools
+  - bind-utils
+  - nmap-ncat
+  - ntp
+  - which
+  - iftop
+  - htop
+  - firewalld
+  - fail2ban
+  - tor
+  - tmux
+  - pwgen
+  - vim
+  - ca-certificates
+  - lsof
+  - wget
+  - man
+  - stress-ng
+
+target_setup__packages_apt:
+  # - locales
+  - ntp
+  - sudo
+  - tmux
+  - tor
+  - apt-transport-https
+  - lsb-release
+  - curl
+  - fail2ban
+  - unattended-upgrades
+  - ufw
+  - certbot

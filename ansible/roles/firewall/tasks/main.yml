@@ -1,0 +1,20 @@
+- name: "Preventively restart dbus (issue: https://bugzilla.redhat.com/show_bug.cgi?id=1575845)"
+  systemd:
+    name: dbus
+    enabled: yes
+    state: restarted
+
+- name: Make sure firewalld is enabled
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started
+
+- name: Allow custom ports in firewalld
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: yes
+    zone: public
+  with_items: "{{ firewall__custom_ports }}"

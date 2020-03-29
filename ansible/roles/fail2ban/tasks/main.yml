@@ -1,0 +1,40 @@
+---
+- name: Install fail2ban
+  yum:
+    name: fail2ban
+    state: latest
+
+- name: Configure fail2ban
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/fail2ban/jail.d/{{ item }}"
+    mode: "0644"
+    owner: root
+    group: root
+  with_items:
+    - defaults-debian.conf
+    # - sshd.local
+    # - 00-firewalld.conf
+  notify: Restart fail2ban
+
+- name: "Preventively restart dbus (issue: https://bugzilla.redhat.com/show_bug.cgi?id=1575845)"
+  systemd:
+    name: dbus
+    enabled: yes
+    state: restarted
+
+# - name: Make sure firewalld is enabled
+  # systemd:
+  #   name: firewalld
+  #   enabled: yes
+  #   state: started
+
+# - name: Allow custom ports in firewalld
+#   firewalld:
+#     port: "{{ item }}"
+#     permanent: true
+#     state: enabled
+#     immediate: yes
+#     zone: public
+#   with_items: "{{ fail2ban__custom_ports }}"
+#   tags: firewall

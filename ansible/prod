@@ -1,0 +1,23 @@
+[all:vars]
+env=dev
+#ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q poro.zoz.zone" -o ControlMaster=auto -o ControlPersist=yes'
+# Use tor
+#ansible_ssh_common_args: ProxyCommand="connect -a none -5 -S 127.0.0.1:9050 %h %p"
+#ansible_connection=ssh
+#ansible_ssh_user=ansible
+
+[icecast]
+wirklich.kein.fm icecast_master=True
+
+[webservers]
+eurocompton
+
+[qwebirc]
+wirklich.kein.fm qwebirc_port=9090 qwebirc_scheme=http
+
+# TODO: find the best way to populate this for the streaming device
+# best way=attach microsd and operate on storage directly?
+# make a distro?
+# whatever.
+#[raspi]
+#TBD

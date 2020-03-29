@@ -1,0 +1,57 @@
+---
+- name: install icecast
+  apt:
+    name: icecast2
+    state: present
+
+- name: configure icecast
+  template:
+    src: icecast.xml.j2
+    dest: /etc/icecast2/icecast.xml
+  notify:
+    - restart icecast
+
+- name: make sure scripts directory exists
+  file:
+    path: "{{ icecast__scripts_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: make sure samples directory exists
+  file:
+    path: "{{ icecast__samples_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: copy samples
+  copy:
+    src: "{{ role_path }}/files/samples/{{ item }}"
+    dest: "{{ icecast__samples_path }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - Hello.mp3
+
+- name: deploy scripts
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ icecast__scripts_path }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0755"
+  notify:
+    - restart icecast
+  with_items:
+    - on-connect.sh
+    - on-disconnect.sh
+
+- name: make sure icecast is started and enabled
+  systemd:
+    name: icecast
+    state: started
+    enabled: yes

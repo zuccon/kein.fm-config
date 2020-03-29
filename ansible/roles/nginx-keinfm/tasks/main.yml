@@ -1,0 +1,59 @@
+---
+- name: install nginx
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - nginx
+    - libnginx-mod-rtmp
+    - ffmpeg
+
+- name: make sure site-related directories exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: "0755"
+  with_items:
+    - "{{ nginx_keinfm__root_path }}"
+    - "{{ nginx_keinfm__recordings_path }}"
+    - "{{ nginx_keinfm__recordings_path }}/video"
+
+- name: deploy stat.xsl
+  template:
+    src: "stat.xsl"
+    dest: "{{ nginx_keinfm__html_path }}/stat.xsl"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: deploy nginx RTMP conf
+  template:
+    src: "modules-enabled/99-rtmp-keinfm.conf.j2"
+    dest: /etc/nginx/modules-enabled/99-rtmp-keinfm.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - reload nginx
+  tags:
+    - config
+
+- name: deploy nginx site
+  template:
+    src: "sites-enabled/keinfm.conf.j2"
+    dest: /etc/nginx/sites-enabled/keinfm
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - reload nginx
+  tags:
+    - config
+
+- name: make sure nginx is started and enabled
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes

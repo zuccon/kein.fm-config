@@ -1,0 +1,12 @@
+---
+  - name: restart tor
+    service:
+      name: tor
+      state: restarted
+      enabled: yes
+
+  - name: restart sshd
+    service:
+      name: sshd
+      state: restarted
+      enabled: yes

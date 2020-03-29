@@ -1,0 +1,5 @@
+---
+- name: restart icecast
+  systemd:
+    name: icecast2.service
+    state: restarted

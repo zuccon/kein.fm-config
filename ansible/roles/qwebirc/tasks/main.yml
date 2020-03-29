@@ -1,0 +1,71 @@
+---
+- name: create qwebirc user
+  user:
+    name: "{{ qwebirc_user }}"
+    home: "{{ qwebirc_user_homedir }}"
+    shell: /bin/bash
+    create_home: yes
+    state: present
+    system: yes
+
+- name: install qwebirc dependencies
+  apt:
+    name: "{{ qwebirc_apt_dependencies }}"
+    state: present
+
+- name: clone qwebirc git
+  git:
+    repo: "{{ qwebirc_git_repo }}"
+    dest: "{{ qwebirc_install_path }}"
+    version: "{{ qwebirc_git_branch }}"
+    update: yes
+
+- name: make sure qwebirc directories exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ qwebirc_user }}"
+    group: "{{ qwebirc_user }}"
+    mode: "0750"
+  with_items:
+    - /var/log/qwebirc
+    - /var/run/qwebirc
+  
+- name: install qwebirc pip dependencies
+  become: yes
+  become_user: "{{ qwebirc_user }}"
+  pip:
+    requirements: "{{ qwebirc_install_path }}/requirements.txt"
+    state: present
+  
+- name: deploy qwebirc configuration
+  template:
+    src: config.py.j2
+    dest: "{{ qwebirc_install_path }}/config.py"
+
+- name: deploy custom css
+  template:
+    src: keinfm.css
+    dest: "{{ qwebirc_install_path }}/css/keinfm.css"
+
+- name: run qwebirc compile.py
+  command: "{{ qwebirc_install_path }}/compile.py"
+  args:
+    chdir: "{{ qwebirc_install_path }}"
+
+- name: deploy systemd service
+  template:
+    src: qwebirc.service.j2
+    dest: /etc/systemd/system/qwebirc.service
+  register: qwebirc_service
+
+- name: reload systemd daemons
+  systemd:
+    daemon_reload: yes
+  when: qwebirc_service.changed
+
+- name: make sure qwebirc is started and enabled
+  systemd:
+    name: qwebirc.service
+    state: started
+    enabled: yes

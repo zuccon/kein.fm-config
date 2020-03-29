@@ -1,0 +1,64 @@
+---
+# - name: deploy apt sources.list
+#   template:
+#     src: sources.list.j2
+#     dest: /etc/apt/sources.list
+#   tags: apt
+
+# - name: add apt-key
+#   apt_key:
+#     keyserver: subkeys.pgp.net
+#     id: 04EE7237B7D453EC
+
+# - name: apt upgrade
+#   apt:
+#     name: '*'
+#     state: latest
+#     force_apt_get: true
+#     update_cache: yes
+#   ignore_errors: yes
+#   tags: apt
+
+# - name: apt dist-upgrade
+#   apt:
+#     upgrade: dist
+#   tags: apt
+
+# - name: Install EPEL repo
+#   yum:
+#     name: epel-release
+#     state: latest
+#   when: ansible_os_family == "RedHat"
+
+# - name: Install some nice packages
+#   yum:
+#     name: "{{ item }}"
+#     state: latest
+#   with_items: "{{ target_setup__packages_yum }}"
+#   when: ansible_os_family == "RedHat"
+
+# Debian section
+# TODO: ansible_os_family == 'Debian' in progress, find correspondent package names
+# - name: Add Certbot PPA
+#   apt_repository:
+#     repo: ppa:certbot/certbot
+#     state: present
+#     update_cache: yes
+#   when: ansible_os_family == 'Debian'
+
+- name: Upgrade all packages
+  apt:
+    upgrade: dist
+  ignore_errors: yes
+  tags: upgrade_packages
+  when: ansible_os_family == 'Debian'
+  tags: apt
+
+- name: Install some nice packages
+  apt:
+    name: "{{ target_setup__packages_apt }}"
+    state: latest
+  when: ansible_os_family == 'Debian'
+  tags: apt
+
+# /Debian

@@ -1,0 +1,23 @@
+---
+- name: Enable and start ntpd
+  service:
+    name: ntp
+    enabled: yes
+    state: started
+
+- name: Enable and start tor
+  service:
+    name: tor
+    enabled: yes
+    state: started
+
+- name: Disable some ugly services
+  service:
+    name: "{{ item }}"
+    enabled: no
+    state: stopped
+  ignore_errors: yes
+  with_items:
+    - rpcbind
+    - httpd
+    - xinetd

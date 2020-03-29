@@ -1,0 +1,15 @@
+[Unit]
+Description=Web IRC client
+
+[Service]
+ExecStart={{ qwebirc_install_path }}/run.py --port {{ qwebirc_port }} --ip {{ qwebirc_bind_address }} -l /var/log/qwebirc/qwebirc.log -P /var/run/qwebirc/qwebirc.pid
+User={{ qwebirc_user }}
+WorkingDirectory={{ qwebirc_install_path }}
+Type=forking
+PIDFile=/var/run/qwebirc/qwebirc.pid
+RemainAfterExit=no
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
