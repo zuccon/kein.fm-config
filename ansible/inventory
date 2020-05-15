@@ -1,17 +1,10 @@
 [all:vars]
-env=dev
+env=prod
 #ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q poro.zoz.zone" -o ControlMaster=auto -o ControlPersist=yes'
 # Use tor
 #ansible_ssh_common_args: ProxyCommand="connect -a none -5 -S 127.0.0.1:9050 %h %p"
 #ansible_connection=ssh
 #ansible_ssh_user=ansible
 
-[icecast]
-wirklich.kein.fm icecast_master=True
-
-[webservers]
-wirklich.kein.fm
-
-[qwebirc]
-wirklich.kein.fm qwebirc_port=9090 qwebirc_scheme=http
-
+[megahex]
+zzz.megahex.fm

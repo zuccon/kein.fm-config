@@ -5,10 +5,7 @@ icecast__admin_username: "{{ vault_icecast__admin_username }}"
 icecast__admin_password: "{{ vault_icecast__admin_password }}"
 
 icecast__listen_mount_username: "{{ vault_icecast__listen_mount_username }}"
-icecast__listen_mount_password: "{{ vault_icecast__listen_mount_username }}"
-
-icecast__megahex_mount_username: "{{ vault_icecast__megahex_mount_username }}"
-icecast__megahex_mount_password: "{{ vault_icecast__megahex_mount_password }}"
+icecast__listen_mount_password: "{{ vault_icecast__listen_mount_password }}"
 
 icecast__scripts_path: /usr/share/icecast2/scripts
 icecast__recordings_path: /usr/share/icecast2/recordings

@@ -1,0 +1,4 @@
+---
+nginx__root_path: /var/www/megahex
+nginx__html_path: "{{ nginx__root_path }}/html"
+nginx__recordings_path: "{{ nginx__html_path }}/recordings"

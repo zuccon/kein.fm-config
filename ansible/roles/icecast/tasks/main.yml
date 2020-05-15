@@ -19,23 +19,31 @@
     group: root
     mode: "0755"
 
-- name: make sure samples directory exists
+- name: make sure recordings directory exists
   file:
-    path: "{{ icecast__samples_path }}"
+    path: /usr/share/icecast2/recordings
     state: directory
-    owner: root
-    group: root
+    owner: icecast2
+    group: icecast
     mode: "0755"
 
-- name: copy samples
-  copy:
-    src: "{{ role_path }}/files/samples/{{ item }}"
-    dest: "{{ icecast__samples_path }}/{{ item }}"
-    owner: root
-    group: root
-    mode: "0644"
-  with_items:
-    - Hello.mp3
+# - name: make sure samples directory exists
+#   file:
+#     path: "{{ icecast__samples_path }}"
+#     state: directory
+#     owner: root
+#     group: root
+#     mode: "0755"
+
+# - name: copy samples
+#   copy:
+#     src: "{{ role_path }}/files/samples/{{ item }}"
+#     dest: "{{ icecast__samples_path }}/{{ item }}"
+#     owner: root
+#     group: root
+#     mode: "0644"
+#   with_items:
+#     - Hello.mp3
 
 - name: deploy scripts
   template:
@@ -52,6 +60,6 @@
 
 - name: make sure icecast is started and enabled
   systemd:
-    name: icecast
+    name: icecast2.service
     state: started
     enabled: yes

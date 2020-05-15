@@ -1,0 +1,68 @@
+---
+- name: install nginx
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - nginx
+    # - libnginx-mod-rtmp
+    # - ffmpeg
+
+- name: make sure site-related directories exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: "0755"
+  with_items:
+    - "{{ nginx_megahex__root_path }}"
+    - "{{ nginx_megahex__html_path }}"
+    - "{{ nginx_megahex__recordings_path }}"
+    # - "{{ nginx_megahex__recordings_path }}/video"
+
+- name: allow icecast user to write to recordings directory
+  file:
+    path: "{{ nginx_megahex__recordings_path }}"
+    state: directory
+    owner: icecast2
+    group: icecast
+    mode: "0755"
+
+# - name: deploy stat.xsl
+#   template:
+#     src: "stat.xsl"
+#     dest: "{{ nginx_megahex__html_path }}/stat.xsl"
+#     owner: root
+#     group: root
+#     mode: "0644"
+
+# - name: deploy nginx RTMP conf
+#   template:
+#     src: "modules-enabled/99-rtmp-megahex.conf.j2"
+#     dest: /etc/nginx/modules-enabled/99-rtmp-megahex.conf
+#     owner: root
+#     group: root
+#     mode: "0644"
+#   notify:
+#     - reload nginx
+#   tags:
+#     - config
+
+- name: deploy nginx site
+  template:
+    src: "sites-enabled/megahex.conf.j2"
+    dest: /etc/nginx/sites-enabled/megahex
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - reload nginx
+  tags:
+    - config
+
+- name: make sure nginx is started and enabled
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes

@@ -12,9 +12,9 @@
     <burst-size>131070</burst-size>
   </limits>
   <authentication>
-    <source-password>{{ icecast__source_password }}</source-password>
-    <relay-password>{{ icecast__relay_password }}</relay-password>
-    <admin-user>{{ icecast__admin_username }}</admin-user>
+	  <source-password>{{ icecast__source_password }}</source-password>
+	  <relay-password>{{ icecast__relay_password }}</relay-password>
+    <admin-user>kamen</admin-user>
     <admin-password>{{ icecast__admin_password }}</admin-password>
   </authentication>
   <directory>
@@ -25,36 +25,38 @@
     <yp-url-timeout>60</yp-url-timeout>
     <yp-url>http://streamstat.net/yp.cgi</yp-url>
   </directory>
-  <hostname>kein.fm</hostname>
+  <hostname>zzz.megahex.fm</hostname>
   <location>earth</location>
-  <admin>invalid@kein.fm</admin>
+  <admin>invalid@megahex.fm</admin>
   <listen-socket>
     <port>8000</port>
     <bind-address>0.0.0.0</bind-address>
+ </listen-socket>
+   <listen-socket>
+    <port>8001</port>
+    <bind-address>0.0.0.0</bind-address>
+    <ssl>1</ssl>
   </listen-socket>
-  <mount>
-    <mount-name>/zuhause</mount-name>
-    <intro>samples/Hello.mp3</intro>
-  </mount>
+   
+<relay>
+    <server>kein.fm</server>
+    <port>8000</port>
+    <mount>/zuhause</mount>
+    <local-mount>/keinfm</local-mount>
+    <relay-shoutcast-metadata>1</relay-shoutcast-metadata>
+    <on-demand>1</on-demand>
+</relay>
   <mount>
     <mount-name>/listen</mount-name>
-    <stream-name>kein.fm</stream-name>
-    <username>{{ icecast__listen_mount_username }}</username>
-    <password>{{ icecast__listen_mount_password }}</password>
-    <dump-file>{{ icecast__recordings_path }}/keinfmlive_%Y-%m-%d_%A_%H%M.mp3</dump-file>
-    <stream-description>Live from somewhere</stream-description>
-    <on-disconnect>{{ icecast__scripts_path }}/on-disconnect.sh</on-disconnect>
-    <on-connect>{{ icecast__scripts_path }}/on-connect.sh</on-connect>
-    <fallback-mount>/zuhause</fallback-mount>
-    <fallback-override>1</fallback-override>
-  </mount>
-  <mount>
-    <mount-name>/megahex</mount-name>
-    <stream-name>megahex</stream-name>
+    <stream-name>Megahex</stream-name>
     <username>onkel</username>
-    <password>a very complex one</password>
-    <dump-file>/var/www/keinfm/recordings/upstate/upstatelive_%Y-%m-%d_%A_%H%M.mp3</dump-file>
-    <stream-description>Streaming from Up State</stream-description>
+    <password>{{ icecast__listen_password }}</password>
+    <dump-file>/usr/share/icecast2/recordings/megahexlive_%Y-%m-%d_%A_%H%M.mp3</dump-file>
+    <stream-description>Live from Up State</stream-description>
+    <on-disconnect>/usr/share/icecast2/scripts/on-disconnect.sh</on-disconnect>
+    <on-connect>/usr/share/icecast2/scripts/on-connect.sh</on-connect>
+    <fallback-mount>/keinfm</fallback-mount>
+    <fallback-override>1</fallback-override>
   </mount>
   <fileserve>1</fileserve>
   <http-headers>
@@ -70,6 +72,8 @@
     <logdir>/var/log/icecast2</logdir>
     <webroot>/usr/share/icecast2/web</webroot>
     <adminroot>/usr/share/icecast2/admin</adminroot>
+
+    <ssl-certificate>/etc/icecast2/bundle.pem</ssl-certificate>
     <!-- <pidfile>/var/run/icecast/icecast.pid</pidfile> -->
     <!-- Aliases: treat requests for 'source' path as being for 'dest' path
              May be made specific to a port or bound address using the "port"

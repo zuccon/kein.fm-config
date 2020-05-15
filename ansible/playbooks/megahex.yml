@@ -6,22 +6,17 @@
 #     - import_role:
 #         name: common-vps
 
-- hosts: qwebirc
-  become: yes
-  tasks:
-    - import_role:
-        name: qwebirc
-
-- hosts: icecast
+- hosts: megahex
   become: yes
   tasks:
     - import_role:
         name: icecast
-      tags:
-        - icecast
+      tags: icecast
 
-- hosts: webservers
-  become: yes
-  tasks:
     - import_role:
-        name: nginx-keinfm
+        name: qwebirc
+      tags: qwebirc
+
+   - import_role:
+        name: nginx
+      tags: nginx

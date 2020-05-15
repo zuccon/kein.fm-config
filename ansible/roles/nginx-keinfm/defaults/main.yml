@@ -1,4 +1,0 @@
----
-nginx_keinfm__root_path: /var/www/keinfm
-nginx_keinfm__html_path: "{{ nginx_keinfm__root_path }}/html"
-nginx_keinfm__recordings_path: "{{ nginx_keinfm__root_path }}/recordings"
