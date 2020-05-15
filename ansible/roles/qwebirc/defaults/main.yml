@@ -20,6 +20,7 @@ qwebirc_ssl_chain:
 # python-virtualenv and python-setuptools are required by ansible's 'pip' module
 # python-dev is required to compile pip dependencies
 qwebirc_apt_dependencies:
+  - build-essential
   - python
   - python-pip
   - python-openssl

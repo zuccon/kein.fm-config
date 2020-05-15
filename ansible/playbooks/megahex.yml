@@ -17,6 +17,6 @@
         name: qwebirc
       tags: qwebirc
 
-   - import_role:
+    - import_role:
         name: nginx
       tags: nginx

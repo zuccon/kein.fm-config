@@ -1,6 +1,6 @@
 ---
-qwebirc_port=9090
-qwebirc_scheme=http
+qwebirc_port: 9090
+qwebirc_scheme: http
 
 icecast__source_password: "{{ vault_icecast__source_password }}"
 icecast__relay_password:  "{{ vault_icecast__relay_password }}"

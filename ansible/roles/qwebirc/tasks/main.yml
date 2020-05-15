@@ -30,6 +30,12 @@
   with_items:
     - /var/log/qwebirc
     - /var/run/qwebirc
+
+- name: install qwebirc pip dependencies as root for compiling
+  become: yes
+  pip:
+    requirements: "{{ qwebirc_install_path }}/requirements.txt"
+    state: present
   
 - name: install qwebirc pip dependencies
   become: yes
